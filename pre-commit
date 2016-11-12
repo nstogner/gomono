@@ -2,6 +2,22 @@
 
 echo "pre-commit: vendoring nested repos..."
 find go -name .git -type d -print | sed "s%\/\.git$%%"
+
+# Remove all objects from sub repos
+find go -name .git -type d -print | sed "s%\.git$%\.git/objects%" | xargs rm -rf
+find go -name .git -type d -print | sed "s%\.git$%\.git/objects%" | xargs mkdir
+find go -name .git -type d -print | sed "s%\.git$%\.git/objects/.vendor%" | xargs touch
+
+# Remove all hooks from sub repos
+find go -name .git -type d -print | sed "s%\.git$%\.git/hooks%" | xargs rm -rf
+find go -name .git -type d -print | sed "s%\.git$%\.git/hooks%" | xargs mkdir
+find go -name .git -type d -print | sed "s%\.git$%\.git/hooks/.vendor%" | xargs touch
+
+# Remove all logs from sub repos
+find go -name .git -type d -print | sed "s%\.git$%\.git/logs%" | xargs rm -rf
+find go -name .git -type d -print | sed "s%\.git$%\.git/logs%" | xargs mkdir
+find go -name .git -type d -print | sed "s%\.git$%\.git/logs/.vendor%" | xargs touch
+
 find go -name .git -type d -print | sed "s%\/\.git$%%" | xargs git reset
 find go -name .git -type d -print | sed -e "p;s/\.git$/\.gitvendor/" | xargs -n2 mv
 find go -name .gitvendor -type d -print | sed "s%\/\.gitvendor$%%" | xargs git add

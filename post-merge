@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "post-merge"
+find go -name .gitvendor -type d -print | sed -e "p;s/\.gitvendor$/\.git/" | xargs -n2 mv
+git ls-files --deleted -z | git update-index --assume-unchanged -z --stdin
