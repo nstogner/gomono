@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "pre-commit: vendoring nested repos..."
+find go -name .git -type d -print | sed "s%\/\.git$%%"
+find go -name .git -type d -print | sed "s%\/\.git$%%" | xargs git reset
+find go -name .git -type d -print | sed -e "p;s/\.git$/\.gitvendor/" | xargs -n2 mv
+find go -name .gitvendor -type d -print | sed "s%\/\.gitvendor$%%" | xargs git add
