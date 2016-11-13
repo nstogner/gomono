@@ -1,5 +1,9 @@
 #!/bin/sh
 
 echo "post-commit"
+# Change all .gitvendor directories back to .git so that tools like go-get
+# will play nicely with them.
 find go -name .gitvendor -type d -print | sed -e "p;s/\.gitvendor$/\.git/" | xargs -n2 mv
+# Tell git not to worry about what it would see as the missing .gitvendor/*
+# content
 git ls-files --deleted -z | git update-index --assume-unchanged -z --stdin

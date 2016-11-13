@@ -18,6 +18,11 @@ find go -name .git -type d -print | sed "s%\.git$%\.git/logs%" | xargs rm -rf
 find go -name .git -type d -print | sed "s%\.git$%\.git/logs%" | xargs mkdir
 find go -name .git -type d -print | sed "s%\.git$%\.git/logs/.vendor%" | xargs touch
 
+# Remove sub-repos from the git index
 find go -name .git -type d -print | sed "s%\/\.git$%%" | xargs git reset
+# Change all sub-repos .git directories to .gitvendor so that the parent
+# repository no longer recognizes them as nested repos.
 find go -name .git -type d -print | sed -e "p;s/\.git$/\.gitvendor/" | xargs -n2 mv
+# Add all of the sub-repos to the index
+# TODO: Only add the repos which were originally added
 find go -name .gitvendor -type d -print | sed "s%\/\.gitvendor$%%" | xargs git add
